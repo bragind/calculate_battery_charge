@@ -132,7 +132,11 @@ def save_to_file():
     if file_path.endswith(".txt"):
         with open(file_path, "w", encoding="utf-8") as f:
             for key, value in data.items():
-                f.write(f"{key}: {value:.2f}\n")
+                # Проверяем, является ли значение числом
+                if isinstance(value, (int, float)):
+                    f.write(f"{key}: {value:.2f}\n")
+                else:
+                    f.write(f"{key}: {value}\n")
         messagebox.showinfo("Сохранено", f"Результаты сохранены в:\n{file_path}")
     elif file_path.endswith(".csv"):
         df = pd.DataFrame(list(data.items()), columns=["Параметр", "Значение"])
@@ -146,7 +150,7 @@ def on_exit():
 
 # === GUI ===
 root = tk.Tk()
-root.title("🔋 Расчёт заряда АКБ — с графиком справа")
+root.title("🔋 Расчёт заряда АКБ — с графиком слева")
 root.geometry("1000x700")
 root.resizable(False, False)
 
@@ -160,9 +164,13 @@ root.grid_rowconfigure(0, weight=1)     # Основной контент
 root.grid_rowconfigure(1, weight=0)     # Результаты
 root.grid_rowconfigure(2, weight=0)     # Кнопки
 
-# === Левая часть — форма ввода ===
+# === Левая часть — график ===
+plot_frame = ttk.Frame(root, width=300, height=300)
+plot_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+# === Правая часть — ввод данных ===
 frame_input = ttk.Frame(root, padding=10)
-frame_input.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+frame_input.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
 # --- Поля ввода ---
 ttk.Label(frame_input, text="🔋 Параметры АКБ").grid(row=0, column=0, sticky="w", pady=5)
@@ -230,14 +238,13 @@ ttk.Button(btn_frame, text="📊 Рассчитать", command=calculate).pack(
 ttk.Button(btn_frame, text="💾 Сохранить", command=save_to_file).pack(side="left", padx=5)
 ttk.Button(btn_frame, text="🚪 Выход", command=on_exit).pack(side="left", padx=5)
 
-# === Правая часть — график ===
-plot_frame = ttk.Frame(root, width=300, height=300)
-plot_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
-
 # === Вывод результатов ===
 result_label = tk.Label(root, text="", justify="left", font=("Courier", 10), bg="white",
-                        anchor="nw", relief="sunken", padx=10, pady=10, wraplength=850)
+                        anchor="nw", relief="sunken", padx=10, pady=10, wraplength=850, height=10)
 result_label.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
+
+# === Пустое пространство внизу ===
+root.grid_rowconfigure(3, weight=1)
 
 # === Запуск приложения ===
 root.mainloop()
