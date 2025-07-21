@@ -41,8 +41,8 @@ def calculate():
 
         # Общие параметры
         total_charge_time = time_charge_cc + time_charge_cv
-        fuel_consumption_cc = time_charge_cc * (power_from_generator_cc / 1000) * fuel_consumption_rate
-        fuel_consumption_cv = time_charge_cv * (power_from_generator_cv / 1000) * fuel_consumption_rate
+        fuel_consumption_cc = time_charge_cc * (power_from_generator_cc / 1000) * fuel_consumption_rate * time_charge_cc
+        fuel_consumption_cv = time_charge_cv * (power_from_generator_cv / 1000) * fuel_consumption_rate * time_charge_cv
         total_fuel_consumption = fuel_consumption_cc + fuel_consumption_cv
         autonomy_time = needed_energy / load_power
 
