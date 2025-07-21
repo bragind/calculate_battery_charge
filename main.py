@@ -164,6 +164,10 @@ def on_exit():
 root = tk.Tk()
 root.title("🔋 Расчёт заряда АКБ — с графиком слева")
 root.geometry("1000x700")
+root.grid_rowconfigure(0, weight=1)  # для основного контента
+root.grid_rowconfigure(1, weight=0)  # для графика
+root.grid_rowconfigure(2, weight=0)  # для кнопок
+root.grid_rowconfigure(3, weight=1)  # опционально
 root.resizable(False, False)
 
 # Обработчик закрытия окна
@@ -249,7 +253,7 @@ entry_P.grid(row=15, column=1)
 
 # === Кнопки ===
 btn_frame = ttk.Frame(root, padding=10)
-btn_frame.grid(row=1, column=0, columnspan=2, sticky="ew")
+btn_frame.grid(row=2, column=0, columnspan=2, sticky="ew")
 
 calc_button = ttk.Button(btn_frame, text="📊 Рассчитать", command=calculate)
 calc_button.pack(side="left", padx=5)
